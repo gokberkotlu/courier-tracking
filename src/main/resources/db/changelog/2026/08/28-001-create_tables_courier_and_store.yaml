@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-table-courier
+      author: gokberkotlu
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_courier
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(64)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(64)
+            tableName: courier
+        - loadData:
+            tableName: courier
+            file: db/data/couriers.csv
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: first_name
+                  type: STRING
+              - column:
+                  name: last_name
+                  type: STRING
+      rollback:
+        - dropTable: { tableName: courier }
+  - changeSet:
+      id: 002-create-table-store
+      author: gokberkotlu
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_store
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uc_store_name
+                  name: name
+                  type: VARCHAR(128)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lat
+                  type: DECIMAL(9, 6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lng
+                  type: DECIMAL(9, 6)
+            tableName: store
+      rollback:
+        - dropTable: { tableName: store }

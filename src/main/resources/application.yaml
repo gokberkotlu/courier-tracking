@@ -1,0 +1,31 @@
+server:
+  port: 8099
+
+spring:
+  application:
+    name: courier-tracking
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:file:./data/demo;AUTO_SERVER=TRUE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+courier-tracking:
+  store:
+    file_path: classpath:db/data/stores.json
+    radius_meters: 100
+    reentry_cooldown: PT1M
