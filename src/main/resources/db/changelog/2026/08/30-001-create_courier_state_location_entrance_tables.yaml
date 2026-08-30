@@ -1,0 +1,159 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-table-courier_location
+      author: gokberkotlu
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_courier_location
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_courier_location_courier
+                    references: courier(id)
+                  name: courier_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: recorded_at
+                  type: TIMESTAMP
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lat
+                  type: DECIMAL(9, 6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lng
+                  type: DECIMAL(9, 6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: outlier
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+            tableName: courier_location
+        - addUniqueConstraint:
+            tableName: courier_location
+            columnNames: courier_id, recorded_at
+            constraintName: uc_courier_location_courier_time
+        - createIndex:
+            tableName: courier_location
+            indexName: idx_courier_location_courier_time
+            columns:
+              - column:
+                  name: courier_id
+              - column:
+                  name: recorded_at
+      rollback:
+        - dropTable: { tableName: courier_location }
+  - changeSet:
+      id: 002-create-table-courier_state
+      author: gokberkotlu
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_courier_state
+                    nullable: false
+                    foreignKeyName: fk_courier_state_courier
+                    references: courier(id)
+                  name: courier_id
+                  type: BIGINT
+              - column:
+                  name: last_lat
+                  type: DECIMAL(9, 6)
+              - column:
+                  name: last_lng
+                  type: DECIMAL(9, 6)
+              - column:
+                  name: last_recorded_at
+                  type: TIMESTAMP
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_distance_meters
+                  type: DOUBLE
+                  defaultValueNumeric: 0
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+                  defaultValueNumeric: 0
+            tableName: courier_state
+      rollback:
+        - dropTable: { tableName: courier_state }
+  - changeSet:
+      id: 003-create-table-store_entrance
+      author: gokberkotlu
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_store_entrance
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_store_entrance_courier
+                    references: courier(id)
+                  name: courier_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_store_entrance_store
+                    references: store(id)
+                  name: store_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: entered_at
+                  type: TIMESTAMP
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lat
+                  type: DECIMAL(9, 6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lng
+                  type: DECIMAL(9, 6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: distance_to_store_meters
+                  type: DOUBLE
+            tableName: store_entrance
+        - createIndex:
+            tableName: store_entrance
+            indexName: idx_store_entrance_courier_store_time
+            columns:
+              - column: { name: courier_id }
+              - column: { name: store_id }
+              - column: { name: entered_at }
+      rollback:
+        - dropTable: { tableName: store_entrance }
+

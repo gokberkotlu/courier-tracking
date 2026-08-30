@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/2026/08/28-001-create_tables_courier_and_store.yaml
+  - include:
+      file: db/changelog/2026/08/30-001-create_courier_state_location_entrance_tables.yaml
