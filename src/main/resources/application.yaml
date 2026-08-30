@@ -5,6 +5,10 @@ spring:
   application:
     name: courier-tracking
 
+  mvc:
+    problemdetails:
+      enabled: true
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -23,6 +27,10 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 courier-tracking:
   store:

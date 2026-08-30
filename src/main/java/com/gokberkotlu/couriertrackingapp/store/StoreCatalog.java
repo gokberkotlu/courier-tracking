@@ -5,6 +5,7 @@ import com.gokberkotlu.couriertrackingapp.model.GeoPoint;
 import com.gokberkotlu.couriertrackingapp.model.Store;
 import com.gokberkotlu.couriertrackingapp.repository.StoreRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -31,6 +32,10 @@ public class StoreCatalog {
 
   public List<Store> stores() {
     return stores;
+  }
+
+  public Optional<Store> findById(Long storeId) {
+    return stores.stream().filter(store -> store.id().equals(storeId)).findFirst();
   }
 
   private static Store toStore(StoreEntity entity) {
