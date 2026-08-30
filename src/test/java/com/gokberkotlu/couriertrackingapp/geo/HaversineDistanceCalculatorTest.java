@@ -17,7 +17,7 @@ class HaversineDistanceCalculatorTest {
   private final DistanceCalculator calculator = new HaversineDistanceCalculator();
 
   @Test
-  @DisplayName("given the same point twice, when distance is calculated, then it returns zero")
+  @DisplayName("given the same geoPoint twice, when distance is calculated, then it returns zero")
   void givenSamePoint_whenCalculatingDistance_thenReturnsZero() {
     double distance = calculator.distanceInMeters(ATASEHIR_STORE, ATASEHIR_STORE);
     Assertions.assertThat(distance).isZero();
@@ -30,9 +30,9 @@ class HaversineDistanceCalculatorTest {
     GeoPoint almostIdentical = GeoPoints.atDistance(ATASEHIR_STORE, 0.001, GeoPoints.NORTH);
     double distance = calculator.distanceInMeters(ATASEHIR_STORE, almostIdentical);
     // A value that should mathematically be 1.0 can sometimes become 1.0000000000000002
-    // due to floating-point precision, causing Math.asin(1.0000000000000002) to return NaN.
+    // due to floating-geoPoint precision, causing Math.asin(1.0000000000000002) to return NaN.
     Assertions.assertThat(distance)
-        .as("floating point rounding must not push asin() out of its domain")
+        .as("floating geoPoint rounding must not push asin() out of its domain")
         .isNotNaN();
   }
 
@@ -46,7 +46,7 @@ class HaversineDistanceCalculatorTest {
 
   @Test
   @DisplayName(
-      "given a point generated 100 meters away, when distance is calculated, then it returns that distance")
+      "given a geoPoint generated 100 meters away, when distance is calculated, then it returns that distance")
   void givenPointGeneratedAtKnownDistance_whenCalculatingDistance_thenReturnsThatDistance() {
     double expectedMeters = 100;
     GeoPoint target = GeoPoints.atDistance(ATASEHIR_STORE, expectedMeters, GeoPoints.NORTH);

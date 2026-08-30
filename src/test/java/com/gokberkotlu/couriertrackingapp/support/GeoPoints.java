@@ -1,7 +1,10 @@
 package com.gokberkotlu.couriertrackingapp.support;
 
 import com.gokberkotlu.couriertrackingapp.model.GeoPoint;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GeoPoints {
   private static final double EARTH_RADIUS_METERS = 6_371_008.8;
 
@@ -9,8 +12,6 @@ public final class GeoPoints {
   public static final double EAST = 90.0;
   public static final double SOUTH = 180.0;
   public static final double WEST = 270.0;
-
-  private GeoPoints() {}
 
   public static GeoPoint atDistance(GeoPoint origin, double meters, double bearingDegrees) {
     double angularDistance = meters / EARTH_RADIUS_METERS;
