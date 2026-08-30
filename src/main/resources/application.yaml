@@ -26,6 +26,9 @@ spring:
 
 courier-tracking:
   store:
-    file_path: classpath:db/data/stores.json
-    radius_meters: 100
-    reentry_cooldown: PT1M
+    store-file-resource: classpath:db/data/stores.json
+    radius-meters: 100
+    reentry-cooldown: PT1M
+  courier:
+    min-movement-meters: 10
+    max-speed-kmh: 150
