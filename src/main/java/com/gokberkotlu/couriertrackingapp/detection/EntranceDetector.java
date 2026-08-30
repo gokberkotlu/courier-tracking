@@ -2,6 +2,7 @@ package com.gokberkotlu.couriertrackingapp.detection;
 
 import com.gokberkotlu.couriertrackingapp.geo.DistanceCalculator;
 import com.gokberkotlu.couriertrackingapp.model.CourierLocation;
+import com.gokberkotlu.couriertrackingapp.model.GeoPoint;
 import com.gokberkotlu.couriertrackingapp.model.Store;
 import com.gokberkotlu.couriertrackingapp.model.StoreEntrance;
 import java.time.Duration;
@@ -35,7 +36,7 @@ public class EntranceDetector {
     for (Store store : stores) {
       double distance =
           distanceCalculator.distanceInMeters(courierLocation.geoPoint(), store.geoPoint());
-      boolean inside = distance <= radiusMeters + DISTANCE_EPSILON_METERS;
+      boolean inside = isInside(distance);
       boolean wasInside = courierProximityState.isInsideStore(store.id());
 
       courierProximityState.setInsideStore(store.id(), inside);
@@ -58,6 +59,14 @@ public class EntranceDetector {
     }
 
     return entrances;
+  }
+
+  public boolean isWithinRadius(GeoPoint point, Store store) {
+    return isInside(distanceCalculator.distanceInMeters(point, store.geoPoint()));
+  }
+
+  private boolean isInside(double distanceMeters) {
+    return distanceMeters <= radiusMeters + DISTANCE_EPSILON_METERS;
   }
 
   private boolean isWithinCooldown(CourierProximityState state, Long storeId, Instant at) {

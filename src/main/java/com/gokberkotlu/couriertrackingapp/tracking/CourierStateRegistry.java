@@ -11,13 +11,20 @@ public class CourierStateRegistry {
 
     Holder<T> holder = new Holder<>();
 
-    statesByCourierId.compute(
-        courierId,
-        (id, existing) -> {
-          CourierState state = existing != null ? existing : loader.apply(id);
-          holder.value = update.apply(state);
-          return state;
-        });
+    try {
+      statesByCourierId.compute(
+          courierId,
+          (id, existing) -> {
+            CourierState state = existing != null ? existing : loader.apply(id);
+            holder.value = update.apply(state);
+            return state;
+          });
+    } catch (RuntimeException e) {
+      // The state may already have been mutated when the update failed, and the surrounding
+      // transaction is about to roll back. Drop it so the next ping reloads what was persisted.
+      statesByCourierId.remove(courierId);
+      throw e;
+    }
 
     return holder.value;
   }

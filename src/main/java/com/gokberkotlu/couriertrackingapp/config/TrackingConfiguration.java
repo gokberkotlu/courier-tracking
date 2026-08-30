@@ -6,6 +6,7 @@ import com.gokberkotlu.couriertrackingapp.geo.DistanceCalculator;
 import com.gokberkotlu.couriertrackingapp.geo.HaversineDistanceCalculator;
 import com.gokberkotlu.couriertrackingapp.properties.CourierProperties;
 import com.gokberkotlu.couriertrackingapp.properties.StoreProperties;
+import com.gokberkotlu.couriertrackingapp.tracking.CourierLocationProcessor;
 import com.gokberkotlu.couriertrackingapp.tracking.CourierStateRegistry;
 import com.gokberkotlu.couriertrackingapp.tracking.TravelledDistanceCalculator;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +43,15 @@ public class TrackingConfiguration {
       DistanceCalculator distanceCalculator, CourierProperties courierProperties) {
     return new TravelledDistanceCalculator(
         distanceCalculator, courierProperties.minMovementMeters());
+  }
+
+  @Bean
+  public CourierLocationProcessor courierLocationProcessor(
+      LocationFilter locationFilter,
+      TravelledDistanceCalculator travelledDistanceCalculator,
+      EntranceDetector entranceDetector) {
+    return new CourierLocationProcessor(
+        locationFilter, travelledDistanceCalculator, entranceDetector);
   }
 
   @Bean

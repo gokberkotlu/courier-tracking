@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class StoreSeeder {
   private final StoreRepository storeRepository;
 
   @EventListener(ApplicationReadyEvent.class)
+  @Order(1)
   @Transactional
   public void seedStore() {
     List<StoreJsonModel> stores = storeJsonReader.read();
