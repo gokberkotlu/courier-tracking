@@ -1,11 +1,11 @@
-package com.gokberkotlu.couriertrackingapp.detection;
+package com.gokberkotlu.couriertrackingapp.tracking;
 
 import com.gokberkotlu.couriertrackingapp.geo.DistanceCalculator;
 import com.gokberkotlu.couriertrackingapp.model.CourierLocation;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CourierTravelledDistanceCalculator {
+public class TravelledDistanceCalculator {
   private final DistanceCalculator distanceCalculator;
   private final double minMovementMeters;
 

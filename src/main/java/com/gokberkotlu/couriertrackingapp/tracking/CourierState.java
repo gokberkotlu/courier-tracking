@@ -1,5 +1,6 @@
-package com.gokberkotlu.couriertrackingapp.detection;
+package com.gokberkotlu.couriertrackingapp.tracking;
 
+import com.gokberkotlu.couriertrackingapp.detection.CourierProximityState;
 import com.gokberkotlu.couriertrackingapp.model.CourierLocation;
 import lombok.Getter;
 

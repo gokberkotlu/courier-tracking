@@ -1,9 +1,7 @@
-package com.gokberkotlu.couriertrackingapp.runner;
+package com.gokberkotlu.couriertrackingapp.store;
 
-import com.gokberkotlu.couriertrackingapp.dto.StoreData;
 import com.gokberkotlu.couriertrackingapp.entity.StoreEntity;
 import com.gokberkotlu.couriertrackingapp.exception.StoreDataLoadException;
-import com.gokberkotlu.couriertrackingapp.reader.StoreJsonReader;
 import com.gokberkotlu.couriertrackingapp.repository.StoreRepository;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,7 @@ public class StoreSeeder {
   @EventListener(ApplicationReadyEvent.class)
   @Transactional
   public void seedStore() {
-    List<StoreData> stores = storeJsonReader.read();
+    List<StoreJsonModel> stores = storeJsonReader.read();
     if (stores.isEmpty()) {
       throw new StoreDataLoadException("Store data file contains no stores");
     }
@@ -38,7 +36,7 @@ public class StoreSeeder {
     int created = 0;
     int updated = 0;
 
-    for (StoreData store : stores) {
+    for (StoreJsonModel store : stores) {
       StoreEntity existing = existingByName.get(store.name());
       if (existing == null) {
         storeRepository.save(new StoreEntity(store.name(), store.lat(), store.lng()));

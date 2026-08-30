@@ -1,4 +1,4 @@
-package com.gokberkotlu.couriertrackingapp.detection;
+package com.gokberkotlu.couriertrackingapp.tracking;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;

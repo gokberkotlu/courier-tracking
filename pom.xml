@@ -12,20 +12,7 @@
     <artifactId>courier-tracking</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>courier-tracking</name>
-    <description>courier-tracking</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <description>Courier tracking service: ingests streaming courier geolocations, detects Migros store entrances and reports travelled distance.</description>
     <properties>
         <java.version>25</java.version>
         <spotless-maven-plugin.version>3.10.1</spotless-maven-plugin.version>
@@ -72,16 +59,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
