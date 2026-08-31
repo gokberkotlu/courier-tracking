@@ -3,6 +3,7 @@ package com.gokberkotlu.couriertrackingapp.tracking;
 import com.gokberkotlu.couriertrackingapp.entity.CourierLocationEntity;
 import com.gokberkotlu.couriertrackingapp.entity.CourierStateEntity;
 import com.gokberkotlu.couriertrackingapp.entity.StoreEntranceEntity;
+import com.gokberkotlu.couriertrackingapp.event.StoreEntranceDetectedEvent;
 import com.gokberkotlu.couriertrackingapp.exception.CourierNotFoundException;
 import com.gokberkotlu.couriertrackingapp.model.CourierLocation;
 import com.gokberkotlu.couriertrackingapp.model.StoreEntrance;
@@ -14,6 +15,7 @@ import com.gokberkotlu.couriertrackingapp.store.StoreCatalog;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class CourierLocationIngestService {
   private final CourierLocationRepository courierLocationRepository;
   private final CourierStateRepository courierStateRepository;
   private final StoreEntranceRepository storeEntranceRepository;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public LocationIngestResult ingest(CourierLocation location) {
@@ -64,7 +67,11 @@ public class CourierLocationIngestService {
     }
 
     saveSnapshot(state);
-    result.storeEntrances().forEach(this::saveEntrance);
+
+    for (StoreEntrance entrance : result.storeEntrances()) {
+      saveEntrance(entrance);
+      eventPublisher.publishEvent(new StoreEntranceDetectedEvent(entrance));
+    }
   }
 
   private void saveSnapshot(CourierState state) {
