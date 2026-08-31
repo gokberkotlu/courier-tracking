@@ -35,7 +35,16 @@ ping() {
     -H 'Content-Type: application/json' \
     -d "{\"lat\":$lat,\"lng\":$STORE_LNG,\"recordedAt\":\"$recorded_at\"}")
 
-  accepted=$(printf '%s' "$response" | grep -o '"accepted":[a-z]*' | cut -d: -f2)
+  accepted=$(printf '%s' "$response" | grep -o '"accepted":[a-z]*' | cut -d: -f2 || true)
+
+  if [ -z "$accepted" ]; then
+    printf '  ping   %s   lat=%s   %-34s [refused]\n' "${recorded_at:11:8}" "$lat" "$note"
+    printf '\n  The application would not accept this ping:\n'
+    printf '%s' "$response" | format_json | sed 's/^/    /'
+    printf '\n  The demo cannot continue from here.\n'
+    exit 1
+  fi
+
   printf '  ping   %s   lat=%s   %-34s %s\n' \
     "${recorded_at:11:8}" "$lat" "$note" "[accepted=$accepted]"
 
@@ -63,7 +72,13 @@ require_application() {
 
 require_clean_state() {
   local travelled
-  travelled=$(curl -sS "$API/total-distance" | grep -o '"totalDistanceMeters":[0-9.E-]*' | cut -d: -f2)
+  travelled=$(curl -sS "$API/total-distance" | grep -o '"totalDistanceMeters":[0-9.E-]*' | cut -d: -f2 || true)
+
+  if [ -z "$travelled" ]; then
+    echo "Could not read the travelled distance for courier $COURIER_ID from $BASE_URL." >&2
+    echo "The seeded couriers are 1, 2 and 3." >&2
+    exit 1
+  fi
 
   if [ "${travelled%%.*}" != "0" ]; then
     echo "Courier $COURIER_ID has already travelled $travelled m, so this run would not match" >&2
