@@ -1,0 +1,7 @@
+# Used by demo.sh. An in-memory database keeps the scenario reproducible: the demo replays a
+# fixed set of timestamps, which would collide with the rows left behind by an earlier run.
+spring:
+  datasource:
+    url: jdbc:h2:mem:courier-tracking-demo;DB_CLOSE_DELAY=-1
+  jpa:
+    show-sql: false
