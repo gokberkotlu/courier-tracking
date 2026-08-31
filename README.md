@@ -41,6 +41,9 @@ restarts, which is what the section on restarts below relies on.
 Lines starting with `ping` are what the courier sent. Blocks starting with `>>` are what came
 back out of the application, each with the value to expect next to it.
 
+`BASE_URL`, `COURIER_ID` and `PING_DELAY` can be set in the environment if the service is
+somewhere other than `http://localhost:8099` or the pings should arrive at a different pace.
+
 ## The API
 
 | Method | Path | |
@@ -152,9 +155,11 @@ detection/   EntranceDetector, CourierProximityState, LocationFilter
 tracking/    courier state, its registry and loader, the per-ping processing steps,
              the ingestion and query services
 event/       the entrance event and its listener
-store/       reading stores.json, seeding it, holding the catalog in memory
+store/       reading stores.json into the database, holding the catalog in memory
 web/         controller, request and response types, error handling
 entity/ repository/  JPA mapping and Spring Data repositories
+properties/  the courier-tracking.* settings, bound and validated
+exception/   the two exceptions the application raises itself
 config/      TrackingConfiguration
 ```
 
@@ -181,14 +186,16 @@ application at startup rather than quietly changing how it behaves.
 
 H2 with Liquibase migrations, on disk under `data/` so that state survives a restart. The point is
 that the project runs and can be inspected with nothing installed but a JDK: no container to
-start, no connection string to configure, and the H2 console to look at the tables. Nothing in the
-code is H2-specific.
+start, no connection string to configure, and the H2 console to look at the tables. The schema and
+the queries are portable; only the datasource settings name H2.
 
 ## Tests
 
 ```
 ./mvnw verify
 ```
+
+`verify` also runs Spotless, so it fails if the formatting has drifted from google-java-format.
 
 Beyond the arithmetic of the haversine formula, the tests cover the entrance rules end to end
 (transition, dwelling, both sides of the cooldown), the outlier and out-of-order filters, and the
